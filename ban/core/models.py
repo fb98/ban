@@ -64,6 +64,9 @@ class Municipality(NamedModel):
     insee = db.CharField(max_length=5, unique=True)
     siren = db.CharField(max_length=9, unique=True, null=True)
 
+    class Meta:
+        order_by = ['insee']
+
     @property
     def postcodes_resource(self):
         return [p.code for p in self.postcodes]
@@ -87,6 +90,7 @@ class PostCode(BaseGroup):
     code = db.PostCodeField(index=True)
 
     class Meta:
+        order_by = ['code', 'municipality']
         indexes = (
             (('code', 'municipality'), True),
         )
@@ -107,6 +111,9 @@ class Group(BaseGroup):
     fantoir = db.CharField(max_length=9, null=True, unique=True)
     laposte = db.CharField(max_length=10, null=True, unique=True)
     ign = db.CharField(max_length=24, null=True, unique=True)
+
+    class Meta:
+        order_by = ['pk']
 
     @property
     def tmp_fantoir(self):
@@ -234,6 +241,7 @@ class Position(Model):
     comment = peewee.TextField(null=True)
 
     class Meta:
+        order_by = ['pk']
         unique_together = ('housenumber', 'source')
 
     @property
