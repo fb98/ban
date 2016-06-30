@@ -64,6 +64,9 @@ class Municipality(NamedModel):
     insee = db.CharField(max_length=5, unique=True)
     siren = db.CharField(max_length=9, unique=True, null=True)
 
+    class Meta:
+        order_by = ['insee']
+
     @property
     def postcodes_extended(self):
         return [p.as_relation for p in self.postcodes]
@@ -80,6 +83,7 @@ class PostCode(NamedModel):
     municipality = db.ForeignKeyField(Municipality, related_name='postcodes')
 
     class Meta:
+        order_by = ['code', 'municipality']
         indexes = (
             (('code', 'municipality'), True),
         )
@@ -119,8 +123,10 @@ class Group(NamedModel):
     fantoir = db.CharField(max_length=9, null=True, unique=True)
     laposte = db.CharField(max_length=10, null=True, unique=True)
     ign = db.CharField(max_length=24, null=True, unique=True)
-
     municipality = db.ForeignKeyField(Municipality, related_name='groups')
+
+    class Meta:
+        order_by = ['pk']
 
     @property
     def tmp_fantoir(self):
@@ -256,6 +262,7 @@ class Position(Model):
     comment = peewee.TextField(null=True)
 
     class Meta:
+        order_by = ['pk']
         unique_together = ('housenumber', 'source')
 
     @property
