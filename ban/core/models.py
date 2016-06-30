@@ -68,12 +68,8 @@ class Municipality(NamedModel):
         order_by = ['insee']
 
     @property
-    def postcodes_extended(self):
-        return [p.as_relation for p in self.postcodes]
-
-    @property
-    def postcodes_compact(self):
-        return [p.id for p in self.postcodes]
+    def postcodes_resource(self):
+        return [p.code for p in self.postcodes]
 
 
 class PostCode(NamedModel):
